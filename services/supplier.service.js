@@ -3,7 +3,7 @@
 import supplierRepository from "../repositories/supplier.repository.js";
 
 async function createSupplier(supplier){
-    return await supplierRepository.insertSupplier(supplier);
+    return await supplierRepository.insertSuppliers(supplier);
 }
 
 async function getSuppliers(){
@@ -15,11 +15,11 @@ async function getSupplier(id){
 }
 
 async function deleteSupplier(id){
-    await supplierRepository.deleteSupplier(id);
+    await supplierRepository.deleteSuppliers(id);
 }
 
 async function updateSupplier(supplier){
-    return await supplierRepository.updateSupplier(supplier);
+    return await supplierRepository.updateSuppliers(supplier);
 }
 
 export default {

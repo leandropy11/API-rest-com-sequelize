@@ -1,24 +1,14 @@
 //Função para conexão com o banco de dados
+import Sequelize from 'sequelize';
 
-import pg from 'pg';
-
-async function connect(){
-    //Criando um pool de conexões
-
-    if(global.connection){
-        return global.connection.connect();
+const sequelize = new Sequelize( //sequelize já se responsabiliza por lidar com o pool de conexões
+    "postgres://rdslqdag:BpjnKpGFbyY16l3GeFqSjM-GdOd7FR7B@drona.db.elephantsql.com/rdslqdag",
+    {
+        dialect: 'postgres',
+        define: {
+            timestamps: false
+        }
     }
+)
 
-    const pool = new pg.Pool({
-        connectionString: "postgres://rdslqdag:BpjnKpGFbyY16l3GeFqSjM-GdOd7FR7B@drona.db.elephantsql.com/rdslqdag"
-    });
-
-    global.connection = pool;
-
-    return pool.connect();
-}
-
-
-export  {
-    connect
-}
+export default sequelize;

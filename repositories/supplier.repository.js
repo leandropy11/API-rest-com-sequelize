@@ -1,75 +1,64 @@
-//Faz a conexão com o banco de dado
+//Faz a conexão com o banco de dados
 
-import {connect} from './db.js';
+import Supplier from '../models/supplier.model.js';
 
-async function insertSupplier(supplier){
-    const conn = await connect();
-    try{
-        const sql = "INSERT INTO suppliers (name, cnpj, phone, email, address) VALUES($1, $2, $3, $4, $5) RETURNING *"
-        const values = [supplier.name, supplier.cnpj, supplier.phone, supplier.email, supplier.address];
-        const res = await conn.query(sql, values);
-        return res.rows[0];
+async function insertSuppliers(supplier){
+    try {
+        return await Supplier.create(supplier);
     } catch(err){
         throw err;
-    } finally {
-        conn.release();
-    }
-    
+    }  
 }
 
-async function getSuppliers(){ // Retorna todos os supplieres do banco
-    const conn = await connect();
+async function getSuppliers(){ // Retorna todos os supplierses do banco
+
     try {
-        const res = await conn.query("SELECT * FROM suppliers");
-        return res.rows;
-    } catch(err) {
+        return await Supplier.findAll();
+    } catch(err){
         throw err;
-    }finally {
-        conn.release();
     }
 }
 
-async function getSupplier(id){ // Retorna o suppliere pelo id
-    const conn = await connect();
+async function getSupplier(id){ // Retorna o supplierse pelo id
+
     try {
-        const res = await conn.query("SELECT * FROM suppliers WHERE suppliers_id = $1", [id]);
-        return res.rows[0];
-    } catch(err) {
+        return await Supplier.findByPk(id); // findByPk procura pela primary Key da tabel
+    } catch(err){
         throw err;
-    }finally {
-        conn.release();
     }
 }
 
-async function updateSupplier(supplier){
-    const conn = await connect();
+async function updateSuppliers(supplier){
+
     try {
-        const sql = 'UPDATE suppliers SET name = $1, cnpj = $2, phone = $3, email = $4, address = $5 WHERE suppliers_id = $6 RETURNING *';
-        const values = [supplier.name, supplier.cnpj, supplier.phone, supplier.email, supplier.address, supplier.suppliers_id];
-        const res = await conn.query(sql, values);
-        return res.rows[0];
-    } catch(err) {
+        await Supplier.update(supplier, {
+            where: {
+                suppliersId: supplier.suppliersId
+            }
+        });
+        return await getSuppliers(supplier.suppliersId);
+    } catch(err){
         throw err;
-    }finally {
-        conn.release();
     }
 }
 
-async function deleteSupplier(id){
-    const conn = await connect();
+async function deleteSuppliers(id){
+
     try {
-        await conn.query("DELETE FROM suppliers WHERE suppliers_id = $1", [id]);
-    } catch(err) {
+        await Supplier.destroy({
+            where: {
+                suppliersId: id
+            }
+        });
+    } catch(err){
         throw err;
-    }finally {
-        conn.release();
     }
 }
 
 export default {
-    insertSupplier,
-    getSuppliers,
+    insertSuppliers,
     getSupplier,
-    updateSupplier,
-    deleteSupplier
+    getSuppliers,
+    updateSuppliers,
+    deleteSuppliers
 }

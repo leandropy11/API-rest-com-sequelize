@@ -5,7 +5,7 @@ import productService from "../services/product.service.js";
 async function createProduct(req, res, next){
     try {
         let product = req.body;
-        if(!product.name || !product.description || !product.value || !product.stock || !product.suppliers_id){
+        if(!product.name || !product.description || !product.value || !product.stock || !product.suppliersId){
             throw new Error("name, Description, Value, Stock e Suppliers ID são obrigatórios");
         }
 
@@ -51,7 +51,7 @@ async function deleteProduct(req, res, next){
 async function updateProduct(req, res, next){
     try{
         let product = req.body;
-        if(!product.product_id || !product.name || !product.description || !product.value || !product.stock || !product.suppliers_id){
+        if(!product.productId || !product.name || !product.description || !product.value || !product.stock || !product.suppliers_id){
             throw new Error('Product ID, Name, Description, Value, Stock, Suppliers ID são obrigatórios');
         }
         product = await productService.updateProduct(product);

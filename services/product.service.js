@@ -2,12 +2,13 @@
 
 import productRepository from "../repositories/product.repository.js";
 import supplierRepository from "../repositories/supplier.repository.js";
+import SaleRepository from '../repositories/sale.repository.js';
 
 async function createProduct(product){
-    if(await supplierRepository.getSupplier(product.suppliers_id)){
+    if(await supplierRepository.getSupplier(product.suppliersId)){
         return await productRepository.insertProduct(product);
     }
-    throw new Error('O supplier ID informado não existe.');
+    throw new Error('O suppliers ID informado não existe.');
     
 }
 
@@ -20,14 +21,18 @@ async function getProduct(id){
 }
 
 async function deleteProduct(id){
+    const sales = await SaleRepository.getSalesByProductId(id);
+    if(sales.length > 0){
+        throw new Error('Não é possível excluir o produto, pois ele já tem vendas'); 
+    }
     await productRepository.deleteProduct(id);
 }
 
 async function updateProduct(product){
-    if(await supplierRepository.getSupplier(product.suppliers_id)){
+    if(await supplierRepository.getSupplier(product.suppliersId)){
         return await productRepository.updateProduct(product);
     }
-    throw new Error('O supplier ID informado não existe.');
+    throw new Error('O suppliers ID informado não existe.');
     
 }
 
